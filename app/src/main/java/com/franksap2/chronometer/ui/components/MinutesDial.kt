@@ -1,7 +1,12 @@
 package com.franksap2.chronometer.ui.components
 
 import android.content.res.Configuration
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -9,7 +14,15 @@ import androidx.compose.ui.unit.sp
 import com.franksap2.chronometer.ui.theme.ChronometerComposeTheme
 
 @Composable
-fun MinutesDial(modifier : Modifier = Modifier) {
+fun MinutesDial(modifier: Modifier = Modifier) {
+
+    val test = remember {
+        Animatable(0f)
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        test.animateTo(360f, tween(60_000 * 30, easing = LinearEasing))
+    }
 
     Chronometer(
         modifier = modifier,
@@ -18,7 +31,7 @@ fun MinutesDial(modifier : Modifier = Modifier) {
         lineSize = 4.dp,
         lineMaxSize = 6.dp,
         lineWidth = 1.dp,
-        animTime = 60_000 * 30,
+        progressProvider = { test.value },
         dialScrewSize = 3.dp,
         centerDial = true,
         dialWidth = 2.dp

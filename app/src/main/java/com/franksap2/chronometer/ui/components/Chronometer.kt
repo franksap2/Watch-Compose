@@ -1,17 +1,12 @@
 package com.franksap2.chronometer.ui.components
 
 import android.content.res.Configuration
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.center
@@ -36,21 +31,13 @@ fun Chronometer(
     lineMaxSize: Dp,
     lineWidth: Dp,
     modifier: Modifier = Modifier,
-    animTime: Int = 60_000,
+    progressProvider: () -> Float,
     centerDial: Boolean = false,
     dialScrewSize: Dp = 5.dp,
     dialWidth: Dp = 3.dp
 ) {
 
     val surfaceColor = MaterialTheme.colors.surface
-
-    val test = remember {
-        Animatable(0f)
-    }
-
-    LaunchedEffect(key1 = Unit) {
-        test.animateTo(360f, tween(animTime, easing = LinearEasing))
-    }
 
     Box(modifier = modifier.aspectRatio(1f)) {
         ChronometerBackground(
@@ -63,8 +50,14 @@ fun Chronometer(
         Canvas(
             modifier = Modifier.fillMaxSize(1f),
             onDraw = {
-                drawDial(test.value, surfaceColor, centerDial, dialScrewSize, dialWidth)
-            },
+                drawDial(
+                    value = progressProvider(),
+                    circleColor = surfaceColor,
+                    centerDial = centerDial,
+                    dialScrewSize = dialScrewSize,
+                    dialWidth = dialWidth
+                )
+            }
         )
     }
 
@@ -105,7 +98,8 @@ private fun ChronometerPreview() {
             textSize = 24.sp,
             lineSize = 10.dp,
             lineMaxSize = 20.dp,
-            lineWidth = 2.dp
+            lineWidth = 2.dp,
+            progressProvider = { 0.3f }
         )
     }
 }
