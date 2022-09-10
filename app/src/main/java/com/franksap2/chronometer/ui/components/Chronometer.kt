@@ -8,7 +8,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,12 +21,26 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.franksap2.chronometer.ui.theme.Amber700
 import com.franksap2.chronometer.ui.theme.ChronometerComposeTheme
 
 @Composable
-fun Chronometer() {
+fun Chronometer(
+    resolution: Int,
+    textSize: TextUnit,
+    lineSize: Dp,
+    lineMaxSize: Dp,
+    lineWidth: Dp,
+    modifier: Modifier = Modifier,
+    animTime: Int = 60_000,
+    centerDial: Boolean = false,
+    dialScrewSize: Dp = 5.dp,
+    dialWidth: Dp = 3.dp
+) {
 
     val surfaceColor = MaterialTheme.colors.surface
 
@@ -36,37 +49,48 @@ fun Chronometer() {
     }
 
     LaunchedEffect(key1 = Unit) {
-        test.animateTo(360f, tween(60_000, easing = LinearEasing))
+        test.animateTo(360f, tween(animTime, easing = LinearEasing))
     }
 
-    Box(
-        modifier = Modifier
-            .aspectRatio(1f)
-            .padding(20.dp)
-    ) {
-        ChronometerBackground()
+    Box(modifier = modifier.aspectRatio(1f)) {
+        ChronometerBackground(
+            resolution = resolution,
+            textSize = textSize,
+            lineSize = lineSize,
+            lineMaxSize = lineMaxSize,
+            lineWidth = lineWidth
+        )
         Canvas(
             modifier = Modifier.fillMaxSize(1f),
             onDraw = {
-                drawDial(test.value, surfaceColor)
+                drawDial(test.value, surfaceColor, centerDial, dialScrewSize, dialWidth)
             },
         )
     }
 
 }
 
-fun DrawScope.drawDial(value: Float, circleColor: Color) {
+private fun DrawScope.drawDial(
+    value: Float,
+    circleColor: Color,
+    centerDial: Boolean,
+    dialScrewSize: Dp,
+    dialWidth: Dp
+) {
     rotate(value) {
+
+        val start = if (centerDial) size.center else size.center.copy(y = size.height * 0.6f)
+
         drawLine(
-            color = Amber700.copy(0.8f),
-            start = size.center.copy(y = size.height * 0.6f),
+            color = Amber700,
+            start = start,
             end = Offset(size.width / 2, size.height * 0.1f),
-            strokeWidth = 3.dp.toPx(),
+            strokeWidth = dialWidth.toPx(),
             cap = StrokeCap.Round
         )
 
-        drawCircle(circleColor, 5.dp.toPx(), size.center)
-        drawCircle(Amber700, 5.dp.toPx(), size.center, style = Stroke(width = 2.dp.toPx()))
+        drawCircle(circleColor, dialScrewSize.toPx(), size.center)
+        drawCircle(Amber700, dialScrewSize.toPx(), size.center, style = Stroke(width = 2.dp.toPx()))
     }
 
 }
@@ -76,6 +100,12 @@ fun DrawScope.drawDial(value: Float, circleColor: Color) {
 @Composable
 private fun ChronometerPreview() {
     ChronometerComposeTheme {
-        Chronometer()
+        Chronometer(
+            resolution = 1,
+            textSize = 24.sp,
+            lineSize = 10.dp,
+            lineMaxSize = 20.dp,
+            lineWidth = 2.dp
+        )
     }
 }
