@@ -12,7 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.center
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
@@ -31,18 +33,22 @@ import kotlin.math.sin
 private const val BACKGROUND_MAKER_SIZE = 240
 
 @Composable
-fun rememberTextPaint(textSize: TextUnit, textColor: Color): TextPaint {
+private fun rememberTextPaint(textSize: TextUnit, textColor: Color): TextPaint {
 
     val textPx = with(LocalDensity.current) { textSize.toPx() }
 
     return remember {
         TextPaint().apply {
+            isAntiAlias = true
             this.textAlign = Paint.Align.CENTER
             this.textSize = textPx
             color = textColor.toArgb()
         }
     }
 }
+
+@Composable
+private fun rememberPath() = remember { Path() }
 
 @Composable
 fun ChronometerBackground(
@@ -54,6 +60,7 @@ fun ChronometerBackground(
 ) {
 
     val textPaint = rememberTextPaint(textSize = textSize, textColor = MaterialTheme.colors.onSurface)
+    val backgroundPath = rememberPath()
 
     Box {
         Canvas(
@@ -65,23 +72,11 @@ fun ChronometerBackground(
                     textSize = textSize.toPx(),
                     lineSize = lineSize.toPx(),
                     lineMaxSize = lineMaxSize.toPx(),
-                    lineWidth = lineWidth.toPx()
+                    lineWidth = lineWidth.toPx(),
+                    backgroundPath = backgroundPath
                 )
             },
         )
-    /*    Canvas(modifier = Modifier
-            .padding(top = 70.dp)
-            .size(100.dp)
-            .align(Alignment.TopCenter), onDraw = {
-            drawMakers(
-                textPaint = textPaint,
-                resolution = 2,
-                textSize = 12.sp.toPx(),
-                lineSize = 5.dp.toPx(),
-                lineMaxSize = 8.dp.toPx(),
-                lineWidth = 1.dp.toPx()
-            )
-        })*/
     }
 
 }
@@ -92,8 +87,11 @@ fun DrawScope.drawMakers(
     textSize: Float,
     lineSize: Float,
     lineMaxSize: Float,
-    lineWidth: Float
+    lineWidth: Float,
+    backgroundPath: Path
 ) {
+
+    backgroundPath.asAndroidPath()
 
     val markerSize = BACKGROUND_MAKER_SIZE / resolution
     val steps = (360 / resolution) / markerSize
