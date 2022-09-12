@@ -2,39 +2,32 @@ package com.franksap2.chronometer.ui.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.franksap2.chronometer.ui.theme.ChronometerComposeTheme
-import com.franksap2.chronometer.ui.utils.formatTimer
 
-private const val MINUTE = 60_000f
+const val MINUTE = 60_000f
 
 @Composable
-fun SecondsDial(progressProvider: () -> Long) {
+fun SecondsDial(progressProvider: () -> Long, modifier: Modifier = Modifier) {
 
 
-    Box {
+    Box(modifier = modifier) {
 
         Chronometer(
-            resolution = 1,
-            textSize = 24.sp,
-            lineSize = 10.dp,
-            lineMaxSize = 20.dp,
-            lineWidth = 2.dp,
-            progressProvider = { 360f * (progressProvider() / MINUTE) }
-        )
-
-        Text(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 100.dp),
-            text = progressProvider().formatTimer()
+            resolution = 2,
+            textSize = 12.sp,
+            lineSize = 4.dp,
+            lineMaxSize = 6.dp,
+            lineWidth = 1.dp,
+            progressProvider = { 360f * (progressProvider() / MINUTE) },
+            dialScrewSize = 3.dp,
+            centerDial = true,
+            dialWidth = 2.dp,
+            faceType = FaceType.SECONDS
         )
     }
 }
@@ -45,6 +38,6 @@ fun SecondsDial(progressProvider: () -> Long) {
 @Composable
 private fun ChronometerPreview() {
     ChronometerComposeTheme {
-        SecondsDial { 30_000L }
+        SecondsDial(progressProvider = { 30_000L })
     }
 }

@@ -23,7 +23,8 @@ fun MinutesDial(modifier: Modifier = Modifier, progressProvider: () -> Long) {
         progressProvider = { 360f * (progressProvider() / HALF_HOUR) },
         dialScrewSize = 3.dp,
         centerDial = true,
-        dialWidth = 2.dp
+        dialWidth = 2.dp,
+        faceType = FaceType.MINUTES
     )
 
 }

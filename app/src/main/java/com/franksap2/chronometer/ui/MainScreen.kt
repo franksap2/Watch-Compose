@@ -26,14 +26,15 @@ import androidx.compose.ui.unit.dp
 import com.franksap2.chronometer.R
 import com.franksap2.chronometer.ui.components.MinutesDial
 import com.franksap2.chronometer.ui.components.SecondsDial
-import com.franksap2.chronometer.ui.state.rememberChronometerState
+import com.franksap2.chronometer.ui.components.Watch
+import com.franksap2.chronometer.ui.state.rememberWatchState
 import com.franksap2.chronometer.ui.theme.Amber700
 import com.franksap2.chronometer.ui.theme.ChronometerComposeTheme
 
 @Composable
 fun MainScreen() {
 
-    val chronometerState = rememberChronometerState()
+    val chronometerState = rememberWatchState()
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
@@ -46,13 +47,21 @@ fun MainScreen() {
                 .aspectRatio(1f)
         ) {
             MinutesDial(
-                Modifier
+                modifier = Modifier
                     .padding(top = 65.dp)
                     .size(80.dp)
                     .align(Alignment.TopCenter),
-                progressProvider = { chronometerState.currentTime }
+                progressProvider = { chronometerState.currentChronometer }
             )
-            SecondsDial { chronometerState.currentTime }
+            SecondsDial(
+                modifier = Modifier
+                    .padding(bottom = 65.dp)
+                    .align(Alignment.BottomCenter)
+                    .size(80.dp),
+                progressProvider = { chronometerState.currentChronometer }
+            )
+
+            Watch(progressProvider = { chronometerState.currentTime })
         }
 
         Box {

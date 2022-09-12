@@ -30,6 +30,7 @@ fun Chronometer(
     lineSize: Dp,
     lineMaxSize: Dp,
     lineWidth: Dp,
+    faceType: FaceType,
     modifier: Modifier = Modifier,
     progressProvider: () -> Float,
     centerDial: Boolean = false,
@@ -40,12 +41,13 @@ fun Chronometer(
     val surfaceColor = MaterialTheme.colors.surface
 
     Box(modifier = modifier.aspectRatio(1f)) {
-        ChronometerBackground(
+        FaceBackground(
             resolution = resolution,
             textSize = textSize,
             lineSize = lineSize,
             lineMaxSize = lineMaxSize,
-            lineWidth = lineWidth
+            lineWidth = lineWidth,
+            faceType = faceType
         )
         Canvas(
             modifier = Modifier.fillMaxSize(1f),
@@ -63,7 +65,7 @@ fun Chronometer(
 
 }
 
-private fun DrawScope.drawDial(
+fun DrawScope.drawDial(
     value: Float,
     circleColor: Color,
     centerDial: Boolean,
@@ -99,7 +101,8 @@ private fun ChronometerPreview() {
             lineSize = 10.dp,
             lineMaxSize = 20.dp,
             lineWidth = 2.dp,
-            progressProvider = { 0.3f }
+            progressProvider = { 0.3f },
+            faceType = FaceType.WATCH
         )
     }
 }

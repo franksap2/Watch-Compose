@@ -4,6 +4,7 @@ import android.graphics.Paint
 import android.text.TextPaint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -51,18 +52,20 @@ private fun rememberTextPaint(textSize: TextUnit, textColor: Color): TextPaint {
 private fun rememberPath() = remember { Path() }
 
 @Composable
-fun ChronometerBackground(
+fun FaceBackground(
     resolution: Int,
     textSize: TextUnit,
     lineSize: Dp,
     lineMaxSize: Dp,
-    lineWidth: Dp
+    lineWidth: Dp,
+    faceType: FaceType,
+    modifier: Modifier = Modifier
 ) {
 
     val textPaint = rememberTextPaint(textSize = textSize, textColor = MaterialTheme.colors.onSurface)
     val backgroundPath = rememberPath()
 
-    Box {
+    Box(modifier) {
         Canvas(
             modifier = Modifier.fillMaxSize(),
             onDraw = {
@@ -73,7 +76,8 @@ fun ChronometerBackground(
                     lineSize = lineSize.toPx(),
                     lineMaxSize = lineMaxSize.toPx(),
                     lineWidth = lineWidth.toPx(),
-                    backgroundPath = backgroundPath
+                    backgroundPath = backgroundPath,
+                    faceType = faceType
                 )
             },
         )
@@ -88,7 +92,8 @@ fun DrawScope.drawMakers(
     lineSize: Float,
     lineMaxSize: Float,
     lineWidth: Float,
-    backgroundPath: Path
+    backgroundPath: Path,
+    faceType: FaceType
 ) {
 
     backgroundPath.asAndroidPath()
@@ -96,7 +101,12 @@ fun DrawScope.drawMakers(
     val markerSize = BACKGROUND_MAKER_SIZE / resolution
     val steps = (360 / resolution) / markerSize
     val lineSizeStep = 4 / resolution
-    val maxCount = 60 / resolution
+
+    val (linCountPerMarker, maxCount) =  when(faceType){
+        FaceType.MINUTES -> 4 to 30
+        FaceType.SECONDS -> 2 to 60
+        FaceType.WATCH -> 20 to 12
+    }
 
     for (lineCount in 0 until markerSize step steps) {
 
@@ -111,8 +121,8 @@ fun DrawScope.drawMakers(
 
         val size = if (lineCount % lineSizeStep == 0) lineMaxSize else lineSize
 
-        val fiveSecondStep = lineCount % 20 == 0
-        val alpha = if (fiveSecondStep) 1f else 0.4f
+        val addValue = lineCount % 20 == 0
+        val alpha = if (addValue) 1f else 0.4f
 
         val startX = endX + xSin * -size
         val startY = endY - yCos * -size
@@ -128,8 +138,8 @@ fun DrawScope.drawMakers(
             cap = StrokeCap.Round
         )
 
-        if (fiveSecondStep) {
-            val countText = if (lineCount == 0) maxCount else lineCount / 4
+        if (addValue) {
+            val countText = if (lineCount == 0) maxCount else lineCount / linCountPerMarker
 
             val textX = startX + xSin * -textSize
             val textY = startY - yCos * -textSize
@@ -148,7 +158,12 @@ fun DrawScope.drawMakers(
             }
         }
     }
+}
 
+enum class FaceType{
+    MINUTES,
+    SECONDS,
+    WATCH
 }
 
 @Preview(showBackground = true)
@@ -156,12 +171,14 @@ fun DrawScope.drawMakers(
 private fun ChronometerBackgroundPreview() {
     ChronometerComposeTheme {
 
-        ChronometerBackground(
+        FaceBackground(
+            modifier = Modifier.aspectRatio(1f),
             resolution = 1,
             textSize = 24.sp,
             lineSize = 10.dp,
             lineMaxSize = 20.dp,
-            lineWidth = 2.dp
+            lineWidth = 2.dp,
+            faceType = FaceType.WATCH
         )
     }
 }
