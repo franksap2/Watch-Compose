@@ -17,12 +17,15 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.res.ResourcesCompat
+import com.franksap2.chronometer.R
 import com.franksap2.chronometer.ui.theme.ChronometerComposeTheme
 import com.franksap2.chronometer.ui.theme.Gray100
 import com.franksap2.chronometer.ui.utils.MAX_ROTATION
@@ -35,6 +38,7 @@ private const val BACKGROUND_MAKER_COUNT = 120
 private fun rememberTextPaint(textSize: TextUnit, textColor: Color): TextPaint {
 
     val textPx = with(LocalDensity.current) { textSize.toPx() }
+    val context = LocalContext.current
 
     return remember {
         TextPaint().apply {
@@ -42,6 +46,7 @@ private fun rememberTextPaint(textSize: TextUnit, textColor: Color): TextPaint {
             this.textAlign = Paint.Align.CENTER
             this.textSize = textPx
             color = textColor.toArgb()
+            typeface = ResourcesCompat.getFont(context, R.font.fredoka_regular)
         }
     }
 }
