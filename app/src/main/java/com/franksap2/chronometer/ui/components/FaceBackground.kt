@@ -6,16 +6,13 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.center
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
@@ -26,12 +23,13 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.franksap2.chronometer.ui.theme.Amber700
 import com.franksap2.chronometer.ui.theme.ChronometerComposeTheme
+import com.franksap2.chronometer.ui.theme.Gray100
+import com.franksap2.chronometer.ui.utils.MAX_ROTATION
 import kotlin.math.cos
 import kotlin.math.sin
 
-private const val BACKGROUND_MAKER_SIZE = 240
+private const val BACKGROUND_MAKER_COUNT = 120
 
 @Composable
 private fun rememberTextPaint(textSize: TextUnit, textColor: Color): TextPaint {
@@ -49,9 +47,6 @@ private fun rememberTextPaint(textSize: TextUnit, textColor: Color): TextPaint {
 }
 
 @Composable
-private fun rememberPath() = remember { Path() }
-
-@Composable
 fun FaceBackground(
     resolution: Int,
     textSize: TextUnit,
@@ -62,8 +57,7 @@ fun FaceBackground(
     modifier: Modifier = Modifier
 ) {
 
-    val textPaint = rememberTextPaint(textSize = textSize, textColor = MaterialTheme.colors.onSurface)
-    val backgroundPath = rememberPath()
+    val textPaint = rememberTextPaint(textSize = textSize, textColor = Color.White)
 
     Box(modifier) {
         Canvas(
@@ -76,7 +70,6 @@ fun FaceBackground(
                     lineSize = lineSize.toPx(),
                     lineMaxSize = lineMaxSize.toPx(),
                     lineWidth = lineWidth.toPx(),
-                    backgroundPath = backgroundPath,
                     faceType = faceType
                 )
             },
@@ -92,25 +85,21 @@ fun DrawScope.drawMakers(
     lineSize: Float,
     lineMaxSize: Float,
     lineWidth: Float,
-    backgroundPath: Path,
     faceType: FaceType
 ) {
 
-    backgroundPath.asAndroidPath()
+    val markerCount = BACKGROUND_MAKER_COUNT / resolution
 
-    val markerSize = BACKGROUND_MAKER_SIZE / resolution
-    val steps = (360 / resolution) / markerSize
-    val lineSizeStep = 4 / resolution
-
-    val (linCountPerMarker, maxCount) =  when(faceType){
-        FaceType.MINUTES -> 4 to 30
-        FaceType.SECONDS -> 2 to 60
-        FaceType.WATCH -> 20 to 12
+    val (lineCountPerMarker, maxCount) = when (faceType) {
+        FaceType.MINUTES -> 2 to 30
+        FaceType.SECONDS -> 1 to 60
+        FaceType.WATCH -> 10 to 12
     }
 
-    for (lineCount in 0 until markerSize step steps) {
 
-        val angle = 360 * lineCount / markerSize.toFloat()
+    for (lineCount in 0 until markerCount) {
+
+        val angle = MAX_ROTATION * lineCount / markerCount.toFloat()
 
         val xSin = sin(Math.toRadians(angle.toDouble()))
         val yCos = cos(Math.toRadians(angle.toDouble()))
@@ -119,9 +108,9 @@ fun DrawScope.drawMakers(
         val endY = size.center.y - yCos * size.center.y
         val endOffset = Offset(endX.toFloat(), endY.toFloat())
 
-        val size = if (lineCount % lineSizeStep == 0) lineMaxSize else lineSize
+        val size = if (lineCount % 2 == 0) lineMaxSize else lineSize
 
-        val addValue = lineCount % 20 == 0
+        val addValue = lineCount % 10 == 0
         val alpha = if (addValue) 1f else 0.4f
 
         val startX = endX + xSin * -size
@@ -130,7 +119,7 @@ fun DrawScope.drawMakers(
         val startOffset = Offset(startX.toFloat(), startY.toFloat())
 
         drawLine(
-            color = Amber700,
+            color = Gray100,
             start = startOffset,
             end = endOffset,
             strokeWidth = lineWidth,
@@ -139,7 +128,7 @@ fun DrawScope.drawMakers(
         )
 
         if (addValue) {
-            val countText = if (lineCount == 0) maxCount else lineCount / linCountPerMarker
+            val countText = if (lineCount == 0) maxCount else lineCount / lineCountPerMarker
 
             val textX = startX + xSin * -textSize
             val textY = startY - yCos * -textSize
@@ -160,7 +149,7 @@ fun DrawScope.drawMakers(
     }
 }
 
-enum class FaceType{
+enum class FaceType {
     MINUTES,
     SECONDS,
     WATCH

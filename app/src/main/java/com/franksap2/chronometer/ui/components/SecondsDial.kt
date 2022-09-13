@@ -8,12 +8,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.franksap2.chronometer.ui.theme.ChronometerComposeTheme
-
-const val MINUTE = 60_000f
+import com.franksap2.chronometer.ui.utils.MAX_ROTATION
+import com.franksap2.chronometer.ui.utils.MINUTE_MILLI
 
 @Composable
 fun SecondsDial(progressProvider: () -> Long, modifier: Modifier = Modifier) {
-
 
     Box(modifier = modifier) {
 
@@ -23,7 +22,7 @@ fun SecondsDial(progressProvider: () -> Long, modifier: Modifier = Modifier) {
             lineSize = 4.dp,
             lineMaxSize = 6.dp,
             lineWidth = 1.dp,
-            progressProvider = { 360f * (progressProvider() / MINUTE) },
+            progressProvider = { MAX_ROTATION * (progressProvider() / MINUTE_MILLI) },
             dialScrewSize = 3.dp,
             centerDial = true,
             dialWidth = 2.dp,

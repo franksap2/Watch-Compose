@@ -12,6 +12,10 @@ import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import com.franksap2.chronometer.ui.utils.HOUR
+import com.franksap2.chronometer.ui.utils.MINUTE
+import com.franksap2.chronometer.ui.utils.MINUTES_ON_DAY
+import com.franksap2.chronometer.ui.utils.SECONDS_ON_DAY
 import java.time.LocalTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -38,13 +42,20 @@ fun rememberWatchState(): WatchState {
     return state
 }
 
+
 @Stable
 class WatchState(private val coroutineScope: CoroutineScope) {
 
     var currentChronometer by mutableStateOf(0L)
         private set
 
-    var currentTime by mutableStateOf(0L)
+    var currentSeconds by mutableStateOf(0L)
+        private set
+
+    var currentMinutes by mutableStateOf(0f)
+        private set
+
+    var currentHour by mutableStateOf(0f)
         private set
 
     var isChronometerEnable by mutableStateOf(false)
@@ -58,11 +69,19 @@ class WatchState(private val coroutineScope: CoroutineScope) {
     fun startWatch() {
         isWatchEnable = true
         coroutineScope.launch {
-            val time = LocalTime.now().second * 1000
+
+            val time = LocalTime.now()
+            val seconds = time.toSecondOfDay() * 1000
+
             val startTimer = withFrameMillis { it }
 
             do {
-                currentTime = time + withFrameMillis { it } - startTimer
+                currentSeconds = seconds + withFrameMillis { it } - startTimer
+
+                val secondsOfDay = currentSeconds / SECONDS_ON_DAY
+                val hour = (secondsOfDay * HOUR) / 1000
+                currentHour =  hour
+                currentMinutes = (((secondsOfDay * MINUTES_ON_DAY) / 1000) % MINUTE)
             } while (isWatchEnable)
 
         }
@@ -72,7 +91,7 @@ class WatchState(private val coroutineScope: CoroutineScope) {
         isWatchEnable = false
     }
 
-    fun play() {
+    fun playChronometer() {
         if (isChronometerEnable) {
             isPause = false
         } else {
@@ -101,7 +120,7 @@ class WatchState(private val coroutineScope: CoroutineScope) {
         }
     }
 
-    fun stop() {
+    fun stopChronometer() {
         isChronometerEnable = false
     }
 

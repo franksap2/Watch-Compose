@@ -7,8 +7,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.franksap2.chronometer.ui.theme.ChronometerComposeTheme
-
-private const val HALF_HOUR = 60_000 * 30f
+import com.franksap2.chronometer.ui.utils.HALF_HOUR_MILLI
+import com.franksap2.chronometer.ui.utils.MAX_ROTATION
 
 @Composable
 fun MinutesDial(modifier: Modifier = Modifier, progressProvider: () -> Long) {
@@ -20,7 +20,7 @@ fun MinutesDial(modifier: Modifier = Modifier, progressProvider: () -> Long) {
         lineSize = 4.dp,
         lineMaxSize = 6.dp,
         lineWidth = 1.dp,
-        progressProvider = { 360f * (progressProvider() / HALF_HOUR) },
+        progressProvider = { MAX_ROTATION * (progressProvider() / HALF_HOUR_MILLI) },
         dialScrewSize = 3.dp,
         centerDial = true,
         dialWidth = 2.dp,

@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.franksap2.chronometer.ui.theme.Amber700
 import com.franksap2.chronometer.ui.theme.ChronometerComposeTheme
 
 @Composable
@@ -57,7 +56,8 @@ fun Chronometer(
                     circleColor = surfaceColor,
                     centerDial = centerDial,
                     dialScrewSize = dialScrewSize,
-                    dialWidth = dialWidth
+                    dialWidth = dialWidth,
+                    dialColor = Color.Black
                 )
             }
         )
@@ -70,22 +70,23 @@ fun DrawScope.drawDial(
     circleColor: Color,
     centerDial: Boolean,
     dialScrewSize: Dp,
-    dialWidth: Dp
+    dialWidth: Dp,
+    dialColor: Color,
 ) {
     rotate(value) {
 
         val start = if (centerDial) size.center else size.center.copy(y = size.height * 0.6f)
 
         drawLine(
-            color = Amber700,
+            color = dialColor,
             start = start,
-            end = Offset(size.width / 2, size.height * 0.1f),
+            end = Offset(size.width / 2, size.height * 0.05f),
             strokeWidth = dialWidth.toPx(),
             cap = StrokeCap.Round
         )
 
         drawCircle(circleColor, dialScrewSize.toPx(), size.center)
-        drawCircle(Amber700, dialScrewSize.toPx(), size.center, style = Stroke(width = 2.dp.toPx()))
+        drawCircle(dialColor, dialScrewSize.toPx(), size.center, style = Stroke(width = 2.dp.toPx()))
     }
 
 }
