@@ -32,9 +32,7 @@ import com.franksap2.chronometer.ui.theme.ChronometerComposeTheme
 private val watchPadding = 20.dp
 private val watchBorder = 10.dp
 private val watchContentPadding = 13.dp
-
 private val internalDialSize = 80.dp
-private val internalDialPadding = 65.dp
 
 @Composable
 fun MainScreen() {
@@ -52,18 +50,18 @@ fun MainScreen() {
                 .aspectRatio(1f)
         ) {
 
-            Column(modifier = Modifier.align(Alignment.Center), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Column(
+                modifier = Modifier.align(Alignment.Center),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
                 MinutesDial(
-                    modifier = Modifier
-                        .padding(top = internalDialPadding)
-                        .size(internalDialSize),
+                    modifier = Modifier.size(internalDialSize),
                     progressProvider = { chronometerState.currentChronometer }
                 )
                 SecondsDial(
-                    modifier = Modifier
-                        .padding(bottom = internalDialPadding)
-                        .size(internalDialSize),
+                    modifier = Modifier.size(internalDialSize),
                     progressProvider = { chronometerState.currentChronometer }
                 )
             }
