@@ -2,6 +2,7 @@ package com.franksap2.chronometer.ui.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -12,9 +13,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.franksap2.chronometer.ui.state.WatchState
+import com.franksap2.chronometer.ui.state.rememberWatchState
+import com.franksap2.chronometer.ui.theme.ChronometerComposeTheme
 import com.franksap2.chronometer.ui.theme.Gray800
 import com.franksap2.chronometer.ui.theme.Red900
 import com.franksap2.chronometer.ui.utils.HOUR
@@ -92,5 +96,15 @@ private fun DrawScope.watchDial(dialLength: Float) {
         strokeWidth = foregroundWidth,
         cap = StrokeCap.Round
     )
+}
 
+
+@Preview(showBackground = true, backgroundColor = 0xFF000000)
+@Composable
+private fun ChronometerPreview() {
+    ChronometerComposeTheme {
+        Watch(
+            watchState = rememberWatchState(), modifier = Modifier.aspectRatio(1f)
+        )
+    }
 }

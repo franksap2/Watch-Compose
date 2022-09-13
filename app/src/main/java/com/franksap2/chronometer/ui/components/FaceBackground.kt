@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
@@ -39,14 +40,17 @@ private fun rememberTextPaint(textSize: TextUnit, textColor: Color): TextPaint {
 
     val textPx = with(LocalDensity.current) { textSize.toPx() }
     val context = LocalContext.current
-
+    val inspectionMode = LocalInspectionMode.current
     return remember {
         TextPaint().apply {
             isAntiAlias = true
             this.textAlign = Paint.Align.CENTER
             this.textSize = textPx
             color = textColor.toArgb()
-            typeface = ResourcesCompat.getFont(context, R.font.fredoka_regular)
+
+            if (!inspectionMode) {
+                typeface = ResourcesCompat.getFont(context, R.font.fredoka_regular)
+            }
         }
     }
 }
@@ -160,7 +164,7 @@ enum class FaceType {
     WATCH
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, backgroundColor = 0xFF000000)
 @Composable
 private fun ChronometerBackgroundPreview() {
     ChronometerComposeTheme {

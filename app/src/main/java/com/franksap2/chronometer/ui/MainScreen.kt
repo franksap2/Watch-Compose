@@ -1,6 +1,5 @@
 package com.franksap2.chronometer.ui
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -106,8 +105,7 @@ private fun PlayButton(modifier: Modifier = Modifier, onCheckStateChange: (Boole
     }
 }
 
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(showBackground = true, backgroundColor = 0xFF000000)
 @Composable
 private fun MainScreenPreview() {
     ChronometerComposeTheme {

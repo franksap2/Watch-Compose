@@ -1,6 +1,5 @@
 package com.franksap2.chronometer.ui.components
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -32,8 +31,7 @@ fun SecondsDial(progressProvider: () -> Long, modifier: Modifier = Modifier) {
 }
 
 
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(showBackground = true, backgroundColor = 0xFF000000)
 @Composable
 private fun ChronometerPreview() {
     ChronometerComposeTheme {
