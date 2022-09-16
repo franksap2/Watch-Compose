@@ -43,7 +43,7 @@ fun Watch(
             faceType = FaceType.WATCH
         )
         Canvas(
-            modifier = Modifier.fillMaxSize(1f),
+            modifier = Modifier.fillMaxSize(),
             onDraw = {
 
                 drawWatchDials(

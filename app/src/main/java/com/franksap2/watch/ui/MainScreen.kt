@@ -6,9 +6,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSizeIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -44,18 +45,17 @@ fun MainScreen() {
 
     val chronometerState = rememberWatchState()
 
-    Column(
-        Modifier.animateContentSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+        Spacer(modifier = Modifier.weight(1f))
 
         Box(
             modifier = Modifier
+                .requiredSizeIn(maxHeight = 400.dp, maxWidth = 400.dp)
                 .padding(watchPadding)
                 .border(watchBorder, MaterialTheme.colors.primaryVariant, CircleShape)
                 .background(MaterialTheme.colors.primary, CircleShape)
                 .padding(watchContentPadding)
-                .aspectRatio(1f)
         ) {
 
             Column(
@@ -79,11 +79,13 @@ fun MainScreen() {
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.animateContentSize().fillMaxWidth(),
+            modifier = Modifier
+                .animateContentSize()
+                .fillMaxWidth(),
         ) {
             if (chronometerState.isChronometerEnable) {
                 Text(
-                    modifier = Modifier.width(70.dp),
+                    modifier = Modifier.width(75.dp),
                     text = chronometerState.currentChronometer.formatTimer(),
                     color = MaterialTheme.colors.onBackground
                 )
@@ -100,8 +102,9 @@ fun MainScreen() {
             )
         }
 
-
+        Spacer(modifier = Modifier.weight(1f))
     }
+
 }
 
 @Composable

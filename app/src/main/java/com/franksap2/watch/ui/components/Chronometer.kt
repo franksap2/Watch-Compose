@@ -38,7 +38,7 @@ fun Chronometer(
 
     val surfaceColor = MaterialTheme.colors.surface
 
-    Box(modifier = modifier.aspectRatio(1f)) {
+    Box(modifier = modifier.fillMaxSize()) {
         FaceBackground(
             resolution = resolution,
             textSize = textSize,
@@ -48,7 +48,7 @@ fun Chronometer(
             faceType = faceType
         )
         Canvas(
-            modifier = Modifier.fillMaxSize(1f),
+            modifier = Modifier.fillMaxSize(),
             onDraw = {
                 drawDial(
                     value = progressProvider(),
@@ -95,6 +95,7 @@ fun DrawScope.drawDial(
 private fun ChronometerPreview() {
     ChronometerComposeTheme {
         Chronometer(
+            modifier = Modifier.aspectRatio(1f),
             resolution = 1,
             textSize = 24.sp,
             lineSize = 10.dp,
