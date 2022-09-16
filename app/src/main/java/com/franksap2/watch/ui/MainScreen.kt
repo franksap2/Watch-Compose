@@ -85,7 +85,7 @@ fun MainScreen() {
         ) {
             if (chronometerState.isChronometerEnable) {
                 Text(
-                    modifier = Modifier.width(75.dp),
+                    modifier = Modifier.width(72.dp),
                     text = chronometerState.currentChronometer.formatTimer(),
                     color = MaterialTheme.colors.onBackground
                 )

@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.franksap2.watch.ui.utils.HOUR
+import com.franksap2.watch.ui.utils.MILLI_SECONDS
 import com.franksap2.watch.ui.utils.MINUTE
 import com.franksap2.watch.ui.utils.MINUTES_ON_DAY
 import com.franksap2.watch.ui.utils.SECONDS_ON_DAY
@@ -71,7 +72,7 @@ class WatchState(private val coroutineScope: CoroutineScope) {
         coroutineScope.launch {
 
             val time = LocalTime.now()
-            val seconds = time.toSecondOfDay() * 1000
+            val seconds = (time.toSecondOfDay() * MILLI_SECONDS).toLong()
 
             val startTimer = withFrameMillis { it }
 
@@ -79,9 +80,9 @@ class WatchState(private val coroutineScope: CoroutineScope) {
                 currentSeconds = seconds + withFrameMillis { it } - startTimer
 
                 val secondsOfDay = currentSeconds / SECONDS_ON_DAY
-                val hour = (secondsOfDay * HOUR) / 1000
+                val hour = (secondsOfDay * HOUR) / MILLI_SECONDS
                 currentHour =  hour
-                currentMinutes = (((secondsOfDay * MINUTES_ON_DAY) / 1000) % MINUTE)
+                currentMinutes = (((secondsOfDay * MINUTES_ON_DAY) / MILLI_SECONDS) % MINUTE)
             } while (isWatchEnable)
 
         }

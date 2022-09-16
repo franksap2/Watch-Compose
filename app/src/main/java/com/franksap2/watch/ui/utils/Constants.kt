@@ -7,3 +7,4 @@ const val HOUR = 12f
 const val MINUTE_MILLI = 60_000f
 const val MAX_ROTATION = 360f
 const val HALF_HOUR_MILLI = 60_000 * 30f
+const val MILLI_SECONDS = 1_000f
