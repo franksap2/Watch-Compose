@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.franksap2.chronometer">
+    package="com.franksap2.watch">
 
     <application
         android:allowBackup="true"
@@ -11,13 +11,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ChronometerCompose"
+        android:theme="@style/Theme.WatchCompose"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name="com.franksap2.watch.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.ChronometerCompose">
+            android:theme="@style/Theme.WatchCompose">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

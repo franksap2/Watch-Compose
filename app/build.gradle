@@ -7,7 +7,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.franksap2.chronometer"
+        applicationId "com.franksap2.watch"
         minSdk 26
         targetSdk 33
         versionCode 1
