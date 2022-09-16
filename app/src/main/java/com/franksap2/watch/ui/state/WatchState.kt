@@ -33,7 +33,7 @@ fun rememberWatchState(): WatchState {
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_START -> state.startWatch()
-                Lifecycle.Event.ON_PAUSE -> state.startWatch()
+                Lifecycle.Event.ON_PAUSE -> state.stopWatch()
                 else -> {}
             }
         }

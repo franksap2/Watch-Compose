@@ -3,7 +3,6 @@ package com.franksap2.watch.ui.components
 import android.graphics.Paint
 import android.text.TextPaint
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -68,22 +67,21 @@ fun FaceBackground(
 
     val textPaint = rememberTextPaint(textSize = textSize, textColor = Color.White)
 
-    Box(modifier) {
-        Canvas(
-            modifier = Modifier.fillMaxSize(),
-            onDraw = {
-                drawMakers(
-                    textPaint = textPaint,
-                    resolution = resolution,
-                    textSize = textSize.toPx(),
-                    lineSize = lineSize.toPx(),
-                    lineMaxSize = lineMaxSize.toPx(),
-                    lineWidth = lineWidth.toPx(),
-                    faceType = faceType
-                )
-            },
-        )
-    }
+    Canvas(
+        modifier = modifier.fillMaxSize(),
+        onDraw = {
+            drawMakers(
+                textPaint = textPaint,
+                resolution = resolution,
+                textSize = textSize.toPx(),
+                lineSize = lineSize.toPx(),
+                lineMaxSize = lineMaxSize.toPx(),
+                lineWidth = lineWidth.toPx(),
+                faceType = faceType
+            )
+        },
+    )
+
 
 }
 
@@ -141,10 +139,6 @@ fun DrawScope.drawMakers(
 
             val textX = startX + xSin * -textSize
             val textY = startY - yCos * -textSize
-
-            textPaint.apply {
-                this.textSize = textSize
-            }
 
             drawIntoCanvas {
                 it.nativeCanvas.drawText(
